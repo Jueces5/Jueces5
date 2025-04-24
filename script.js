@@ -1,28 +1,33 @@
-
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos del DOM
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    const header = document.querySelector('.main-header');
+    const backToTop = document.querySelector('.back-to-top');
     
-    //Menú móvil
-    this.documentElementByAdd('mobile-menu-toggle').addEventListener('click', function() {
-        const menuToggle = document.querySelector('.menu-toggle');
-        nav.classList.toggle('show');
+    // Menú móvil
+    menuToggle.addEventListener('click', function() {
+        mainNav.classList.toggle('active');
+        this.classList.toggle('open');
     });
-
-    //Cerrar menú al hacer click en un enlace
+    
+    // Cerrar menú al hacer click en un enlace
     document.querySelectorAll('#main-nav a').forEach(link => {
-        link.addEventListener('click', function () {
-            const nav = document.getElementById('main-nav');
-            nav.classList.remove('show');
-
+        link.addEventListener('click', function() {
+            mainNav.classList.remove('active');
+            menuToggle.classList.remove('open');
         });
     });
     
-    //Scroll suave para enlaces internos
+    // Scroll suave
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
+            if(this.getAttribute('href') === '#') return;
+            
             e.preventDefault();
-
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-
+            
             if (targetElement) {
                 window.scrollTo({
                     top: targetElement.offsetTop - 80,
@@ -31,69 +36,65 @@
             }
         });
     });
-
-    //Cambiar header al hacer scroll
-    const header = this.querySelector('header');
+    
+    // Header al hacer scroll
     window.addEventListener('scroll', function() {
         if (window.scrollY > 100) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
-    });
-
-    //Botón "volver arriba"
-    const backToTop = document.querySelector('.back-to-top');
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 300) {
-            backToTop.classList.add('visible');
-        } else {
-            backToTop.classList.remove('visible');
+        
+        // Botón "volver arriba"
+        if (backToTop) {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
         }
     });
     
-    backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    // Botón "volver arriba"
+    if (backToTop) {
+        backToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-    });
-
-    //Efecto de carga Inicial
-    setTimeout(function() {
-        document.body.classList.add('loaded');
-    }, 500);
-
-    //Galería lightbox
-    const galleryItems = document.querySelectorAll('#galeria .galeria-item');
+    }
+    
+    // Galería lightbox (ejemplo básico)
+    const galleryItems = document.querySelectorAll('.galeria-item');
     galleryItems.forEach(item => {
         item.addEventListener('click', function() {
-            console.log('Abrir lightbox para:', this.querySelector('img').src);
+            // Aquí puedes implementar un lightbox
+            console.log('Imagen clickeada:', this.querySelector('img').src);
         });
     });
-
-    //Validación del formulario
+    
+    // Validación de formulario
     const contactoForm = document.querySelector('.contacto-form');
     if (contactoForm) {
         contactoForm.addEventListener('submit', function(e) {
             e.preventDefault();
-
-            //Validación simple
+            
             const nombre = this.querySelector('input[type="text"]').value.trim();
             const email = this.querySelector('input[type="email"]').value.trim();
             const mensaje = this.querySelector('textarea').value.trim();
-
-            if (nombre === '' || email === '' || mensaje === '') {
+            
+            if (!nombre || !email || !mensaje) {
                 alert('Por favor completa todos los campos');
                 return;
             }
-
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.text(email)) {
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 alert('Por favor ingresa un email válido');
                 return;
             }
-
+            
             alert('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.');
             this.reset();
         });
