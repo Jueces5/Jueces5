@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    let isTransitioning = false;
+
+    //Muestra la primera imagen
+    slides[currentSlide].classList.add('active');
+
+    //Cambiar de slide
+    function nextSlide() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+    
+        setTimeout(() => {
+            slides[currentSlide].classList.add('active');
+            isTransitioning = false;
+        }, 50);
+    }
+
+    //Cambiar la imagen cada 4 segundos
+    let interval = setInterval(nextSlide, 4000);
+
+    document.querySelector('.slideshow').addEventListener('touchstart', function() {
+        clearInterval(interval);
+    });
  
  // Elementos del DOM
     const menuToggle = document.getElementById('menu-toggle');
