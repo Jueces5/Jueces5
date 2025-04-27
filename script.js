@@ -1,25 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos del DOM
+ 
+ // Elementos del DOM
     const menuToggle = document.getElementById('menu-toggle');
     const mainNav = document.getElementById('main-nav');
     const header = document.querySelector('.main-header');
     const backToTop = document.querySelector('.back-to-top');
-    
+   
     // Menú móvil
-    menuToggle.addEventListener('click', function() {
-        mainNav.classList.toggle('active');
-        this.classList.toggle('open');
-    });
-    
-    // Cerrar menú al hacer click en un enlace
+    if (menuToggle && mainNav) {
+        menuToggle.addEventListener('click', function() {
+            this.classList.toggle('open');
+            mainNav.classList.toggle('active');
+        });
+    }
+
+    // Cerrar menú al hacer clic en enlace
     document.querySelectorAll('#main-nav a').forEach(link => {
         link.addEventListener('click', function() {
-            mainNav.classList.remove('active');
             menuToggle.classList.remove('open');
+            mainNav.classList.remove('active');
         });
     });
-    
-    // Scroll suave
+
+    // Scroll suave (funciona en ambas páginas)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             if(this.getAttribute('href') === '#') return;
@@ -57,6 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Botón "volver arriba"
     if (backToTop) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
         backToTop.addEventListener('click', function(e) {
             e.preventDefault();
             window.scrollTo({
@@ -65,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
     
     // Galería lightbox (ejemplo básico)
     const galleryItems = document.querySelectorAll('.galeria-item');
@@ -98,5 +110,10 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.');
             this.reset();
         });
+    }
+    if (mainNav.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
     }
 });

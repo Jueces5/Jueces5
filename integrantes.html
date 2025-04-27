@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integrantes | Jueces5</title>
-    <link rel="stylesheet" href="css/estilo.css">
-    <link rel="icon" href="img/logo.png" type="image/png">
     <link rel="stylesheet" href="estilo.css">
+    <link rel="icon" href="imagenes/logo.jpg" type="image/png">
 </head>
 <body>
-    <header>
+    <header class="main-header">
         <div class="container">
-            <a href="index.html" class="logo"></a>
-            <nav>
-                <ul>
+            <a href="index.html" class="logo">
+                <img src="imagenes/logo.jpg" alt="Jueces5 logo">
+            </a>
+            <nav class="main-nav" id="main-nav">
+                <ul class="nav-list">
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="index.html#biografia">Biografía</a></li>
                     <li><a href="index.html#canciones">Canciones</a></li>
@@ -21,10 +22,12 @@
                     <li><a href="index.html#contacto">Contacto</a></li>
                     <li><a href="integrantes.html" class="active">Integrantes</a></li>
                 </ul>
-           </nav>
-           <button class="menu-toggle" aria-label="Abrir menú">
-              <i class="fas fa-bars"></i>
-           </button>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" >
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
     </header>
 
@@ -249,6 +252,7 @@
     <footer>
         <div class="container">
             <p>&copy; 2023 Jueces5. Todos los derechos reservados.</p>
+            <p class="credits">Sitio web desarrollado por<a href="https://www.instagram.com/emanuelzzz99?igsh=bTU1dGZnbGJnMnRq" style="color:#ff5500"> Emanuel.J Sánchez Insua </a></p>
             <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
         </div>
     </footer>

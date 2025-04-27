@@ -44,6 +44,12 @@ img {
     padding: 0 15px;
 }
 
+.credits {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: 1rem;
+  }
+
 .btn {
     display: inline-block;
     padding: 12px 25px;
@@ -65,10 +71,6 @@ img {
 .btn-small {
     padding: 8px 15px;
     font-size: 0.9rem;
-}
-
-.section {
-    padding: 80px 0;
 }
 
 .section h2 {
@@ -101,13 +103,19 @@ header {
     transition: all 0.3s ease;
 }
 
+.main-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+}
+
 header.scrolled {
     background-color: rgba(255, 255, 255, 0.98);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
-#title {
-    margin: 0;
-}
+
 .container h2 {
     margin-top: 20px;
 }
@@ -117,6 +125,11 @@ header .container {
     align-items: center;
     padding: 15px 0;
     position: relative;
+}
+
+.logo {
+    position: absolute;
+    left: 15px;
 }
 
 .logo img {
@@ -168,17 +181,6 @@ nav ul li a:hover::after {
     font-size: 1.5rem;
     color: var(--dark-color);
     cursor: pointer;
-    padding: 10px;
-    z-index: 1001;
-}
-
-.menu-toggle .icon-bar {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: var(--dark-color);
-    margin: 4px 0;
-    transition: all 0.3s ease;
 }
 
 /* Hero */
@@ -632,15 +634,58 @@ footer {
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
 }
 
-.section-title
-
-/* Sección de otros integrantes */
-
-.otros-integrantes {
-    margin-top: 60px;
-    padding-top: 30px;
-    border-top: 1px solid #eee;
+.main-nav {
+    display: flex;
 }
+
+.nav-list {
+    display: flex;
+    list-style: none;
+}
+
+.nav-list li {
+    margin-left: 30px;
+}
+
+.nav-list a {
+    font-weight: 600;
+    padding: 5px 0;
+    position: relative;
+}
+
+.nav-list a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-list a:hover::after {
+    width: 100%;
+}
+
+.menu-toggle {
+    display: none; /* Oculto en desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+}
+
+.menu-toggle .icon-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--dark-color);
+    margin: 4px 0;
+    transition: all 0.3s ease;
+}
+
 /* Responsive */
 
 @media (max-width: 992px) {
@@ -653,13 +698,36 @@ footer {
     }
 }
 
+@media (min-width: 769px) {
+    .main-nav {
+        position: static;
+        height: auto;
+        width: auto;
+        background: transparent;
+        transform: none;
+    }
+    
+    .nav-list {
+        display: flex;
+    }
+    
+    .menu-toggle {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .canciones-grid {
         grid-template-columns: 1fr;
     }
 
+    header .container {
+        justify-content: space-between;
+        padding: 15px;
+    }
+
     .logo {
-        z-index: 1001;
+        position: static;
     }
 
     .cancion {
@@ -681,15 +749,17 @@ footer {
         padding: 20px;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
         transition: transform 0.3s ease;
+        margin: 0;
     }
 
     .nav-list {
         flex-direction: column;
         align-items: center;
+        padding: 20px;
     }
 
     .nav-list li {
-            margin: 15px 0;
+            margin: 15px 0 !important;
     }
 
     nav.active {
@@ -704,9 +774,23 @@ footer {
         margin: 10px 0;
     }
 
-    .menu-toggle {
+     /* Muestra el botón hamburguesa */
+     .menu-toggle {
         display: block;
-        z-index: 1001;
+        order: 1;
+    }
+
+    /* Transforma el botón en "X" cuando está activo */
+    .menu-toggle.open .icon-bar:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .menu-toggle.open .icon-bar:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .menu-toggle.open .icon-bar:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
     }
 
     .hero h1 {
@@ -735,24 +819,42 @@ footer {
         align-items: center;
     }
 
-    .main-nav {
+    .main-header {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100vh;
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+    
+    .main-header .container {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease;
+        padding: 15px 0;
+    }
+    
+    .logo img {
+        height: 40px;
+    }
+
+    .main-nav {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 80%;
+        height: calc(100vh - 60px);
+        background: white;
+        transition: left 0.3s ease;
         z-index: 1000;
     }
 
     .main-nav.active {
         transform: translateY(0);
+        left: 0;
     }
 }
 
