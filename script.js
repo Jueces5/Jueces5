@@ -1,4 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
+    function initSlideshow() {
+        const slideshow = document.querySelector('.slideshow');
+        if (!slideshow) return;
+    
+        // Detección de touch
+        let isTouchDevice = 'ontouchstart' in window;
+        if (isTouchDevice && window.matchMedia("(max-width: 768px)").matches) {
+            // Intervalo más largo para móvil
+            let interval = setInterval(nextSlide, 5000);
+            
+            // Pausar al tocar
+            slideshow.addEventListener('touchstart', () => {
+                clearInterval(interval);
+            });
+            
+            // Reanudar después de 10 segundos sin interacción
+            slideshow.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    interval = setInterval(nextSlide, 5000);
+                }, 10000);
+            });
+            
+            // Agregar indicadores
+            const slides = document.querySelectorAll('.slide');
+            const indicatorsContainer = document.createElement('div');
+            indicatorsContainer.className = 'slide-indicators';
+            
+            slides.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = `slide-indicator ${index === 0 ? 'active' : ''}`;
+                indicatorsContainer.appendChild(indicator);
+            });
+            
+            slideshow.appendChild(indicatorsContainer);
+        }
+    }
+    
+    // Ejecutar al cargar
+    document.addEventListener('DOMContentLoaded', initSlideshow);
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
     let isTransitioning = false;
@@ -20,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     //Cambiar la imagen cada 4 segundos
-    let interval = setInterval(nextSlide, 4000);
+    let interval = setInterval(nextSlide, 3000);
 
     document.querySelector('.slideshow').addEventListener('touchstart', function() {
         clearInterval(interval);
@@ -142,4 +181,73 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         document.body.style.overflow = '';
     }
+
+    // Lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImage = document.getElementById('lightbox-image');
+const closeLightbox = document.querySelector('.close-lightbox');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const galleryImages = document.querySelectorAll('.galeria-item img');
+
+let currentImageIndex = 0;
+
+// Abrir lightbox
+galleryImages.forEach((img, index) => {
+    img.addEventListener('click', () => {
+        currentImageIndex = index;
+        updateLightboxImage();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Evitar scroll del body
+    });
+});
+
+// Cerrar lightbox
+closeLightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+});
+
+// Cerrar al hacer clic fuera de la imagen
+lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+
+// Navegación
+prevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+    updateLightboxImage();
+});
+
+nextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+    updateLightboxImage();
+});
+
+// Teclado
+document.addEventListener('keydown', (e) => {
+    if (lightbox.classList.contains('active')) {
+        if (e.key === 'Escape') {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        } else if (e.key === 'ArrowLeft') {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateLightboxImage();
+        } else if (e.key === 'ArrowRight') {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            updateLightboxImage();
+        }
+    }
+});
+
+function updateLightboxImage() {
+    const imgSrc = galleryImages[currentImageIndex].src;
+    lightboxImage.src = imgSrc;
+    lightboxImage.alt = galleryImages[currentImageIndex].alt || 'Imagen de la galería';
+}
 });
